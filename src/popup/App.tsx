@@ -387,7 +387,10 @@ export function App() {
     <div className="flex flex-col h-[600px] w-[400px] bg-background text-foreground">
       {/* Header */}
       <header className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <h1 className="text-base font-bold">Tweet Recall</h1>
+        <div className="flex items-center gap-2">
+          <img src="/icons/icon.svg" alt="Tweet Recall" className="h-5 w-5" />
+          <h1 className="text-base font-bold">Tweet Recall</h1>
+        </div>
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"

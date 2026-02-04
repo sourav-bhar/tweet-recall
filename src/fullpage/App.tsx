@@ -104,7 +104,9 @@ export function App() {
       case "oldest":
         return tweetsToSort.sort((a, b) => a.seenAt - b.seenAt);
       case "author":
-        return tweetsToSort.sort((a, b) => a.author.toLowerCase().localeCompare(b.author.toLowerCase()));
+        return tweetsToSort.sort((a, b) =>
+          a.author.toLowerCase().localeCompare(b.author.toLowerCase()),
+        );
       default:
         return tweetsToSort;
     }
@@ -173,7 +175,10 @@ export function App() {
     const newFavorited = new Set(favoritedIds);
     for (const id of tweetIds) {
       try {
-        const response = await sendMessage({ type: "IS_FAVORITED", tweetId: id });
+        const response = await sendMessage({
+          type: "IS_FAVORITED",
+          tweetId: id,
+        });
         if (response.type === "IS_FAVORITED_RESULT" && response.isFavorited) {
           newFavorited.add(id);
         }
@@ -352,12 +357,18 @@ export function App() {
 
   const handleDeleteCollection = async (collectionId: string) => {
     const collection = collections.find((c) => c.id === collectionId);
-    if (!collection || !confirm(`Delete "${collection.name}"? Tweets won't be deleted.`)) {
+    if (
+      !collection ||
+      !confirm(`Delete "${collection.name}"? Tweets won't be deleted.`)
+    ) {
       return;
     }
 
     try {
-      const response = await sendMessage({ type: "DELETE_COLLECTION", id: collectionId });
+      const response = await sendMessage({
+        type: "DELETE_COLLECTION",
+        id: collectionId,
+      });
       if (response.type === "COLLECTION_DELETED") {
         setCollections((prev) => prev.filter((c) => c.id !== collectionId));
         if (selectedCollection === collectionId) {
@@ -435,13 +446,18 @@ export function App() {
       {/* Sidebar */}
       <aside className="w-64 border-r border-border flex flex-col">
         <div className="p-4 border-b border-border">
-          <h1 className="text-xl font-bold">Tweet Recall</h1>
+          <div className="flex items-center gap-2">
+            <img src="/icons/icon.svg" alt="Tweet Recall" className="h-6 w-6" />
+            <h1 className="text-xl font-bold">Tweet Recall</h1>
+          </div>
         </div>
 
         <ScrollArea className="flex-1">
           {/* Time Filter */}
           <section className="p-4 border-b border-border">
-            <h2 className="text-sm font-semibold text-muted-foreground mb-2">Time Filter</h2>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-2">
+              Time Filter
+            </h2>
             <div className="flex flex-col gap-1">
               {(["all", "today", "week", "month"] as TimeFilter[]).map((t) => (
                 <button
@@ -451,10 +467,16 @@ export function App() {
                     "px-3 py-1.5 text-sm rounded-md text-left transition-colors",
                     timeFilter === t
                       ? "bg-primary text-primary-foreground"
-                      : "hover:bg-secondary"
+                      : "hover:bg-secondary",
                   )}
                 >
-                  {t === "all" ? "All Time" : t === "today" ? "Today" : t === "week" ? "Last 7 Days" : "Last 30 Days"}
+                  {t === "all"
+                    ? "All Time"
+                    : t === "today"
+                      ? "Today"
+                      : t === "week"
+                        ? "Last 7 Days"
+                        : "Last 30 Days"}
                 </button>
               ))}
             </div>
@@ -463,7 +485,9 @@ export function App() {
           {/* Collections */}
           <section className="p-4 border-b border-border">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-semibold text-muted-foreground">Collections</h2>
+              <h2 className="text-sm font-semibold text-muted-foreground">
+                Collections
+              </h2>
               <Button
                 variant="ghost"
                 size="icon"
@@ -480,7 +504,7 @@ export function App() {
                   "flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-left transition-colors",
                   selectedCollection === "all"
                     ? "bg-primary text-primary-foreground"
-                    : "hover:bg-secondary"
+                    : "hover:bg-secondary",
                 )}
               >
                 <Folder className="h-4 w-4" />
@@ -492,7 +516,7 @@ export function App() {
                   "flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-left transition-colors",
                   selectedCollection === "__favorites__"
                     ? "bg-primary text-primary-foreground"
-                    : "hover:bg-secondary"
+                    : "hover:bg-secondary",
                 )}
               >
                 <Star className="h-4 w-4" />
@@ -505,11 +529,14 @@ export function App() {
                     "group flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-left transition-colors cursor-pointer",
                     selectedCollection === collection.id
                       ? "bg-primary text-primary-foreground"
-                      : "hover:bg-secondary"
+                      : "hover:bg-secondary",
                   )}
                   onClick={() => setSelectedCollection(collection.id)}
                 >
-                  <Folder className="h-4 w-4" style={{ color: collection.color }} />
+                  <Folder
+                    className="h-4 w-4"
+                    style={{ color: collection.color }}
+                  />
                   <span className="flex-1 truncate">{collection.name}</span>
                   <button
                     onClick={(e) => {
@@ -529,11 +556,17 @@ export function App() {
           <section className="p-4 border-b border-border">
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold">{stats ? formatNumber(stats.totalTweets) : "0"}</div>
-                <div className="text-xs text-muted-foreground">Total Tweets</div>
+                <div className="text-2xl font-bold">
+                  {stats ? formatNumber(stats.totalTweets) : "0"}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Total Tweets
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold">{stats ? formatNumber(stats.uniqueAuthors) : "0"}</div>
+                <div className="text-2xl font-bold">
+                  {stats ? formatNumber(stats.uniqueAuthors) : "0"}
+                </div>
                 <div className="text-xs text-muted-foreground">Authors</div>
               </div>
             </div>
@@ -550,7 +583,9 @@ export function App() {
                 onClick={() => setTheme("light")}
                 className={cn(
                   "p-1.5 transition-colors",
-                  theme === "light" ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                  theme === "light"
+                    ? "bg-secondary text-primary"
+                    : "hover:bg-secondary/50",
                 )}
                 title="Light"
               >
@@ -560,7 +595,9 @@ export function App() {
                 onClick={() => setTheme("dark")}
                 className={cn(
                   "p-1.5 transition-colors",
-                  theme === "dark" ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                  theme === "dark"
+                    ? "bg-secondary text-primary"
+                    : "hover:bg-secondary/50",
                 )}
                 title="Dark"
               >
@@ -570,7 +607,9 @@ export function App() {
                 onClick={() => setTheme("system")}
                 className={cn(
                   "p-1.5 transition-colors",
-                  theme === "system" ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                  theme === "system"
+                    ? "bg-secondary text-primary"
+                    : "hover:bg-secondary/50",
                 )}
                 title="System"
               >
@@ -578,11 +617,21 @@ export function App() {
               </button>
             </div>
           </div>
-          <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleExport}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start"
+            onClick={handleExport}
+          >
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start text-destructive hover:text-destructive" onClick={handleClearAll}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-destructive hover:text-destructive"
+            onClick={handleClearAll}
+          >
             <Trash2 className="h-4 w-4 mr-2" />
             Clear All Data
           </Button>
@@ -619,7 +668,10 @@ export function App() {
             {sortMenuOpen && (
               <div
                 className="absolute right-0 top-full mt-1 border rounded-md shadow-lg z-50 overflow-hidden min-w-[140px]"
-                style={{ backgroundColor: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
+                style={{
+                  backgroundColor: "hsl(var(--card))",
+                  borderColor: "hsl(var(--border))",
+                }}
               >
                 {(["newest", "oldest", "author"] as SortOrder[]).map((s) => (
                   <button
@@ -630,9 +682,13 @@ export function App() {
                     }}
                     className={cn(
                       "block w-full px-4 py-2 text-sm text-left transition-colors",
-                      sortOrder === s ? "bg-secondary" : "hover:bg-secondary"
+                      sortOrder === s ? "bg-secondary" : "hover:bg-secondary",
                     )}
-                    style={sortOrder === s ? { backgroundColor: "hsl(var(--secondary))" } : undefined}
+                    style={
+                      sortOrder === s
+                        ? { backgroundColor: "hsl(var(--secondary))" }
+                        : undefined
+                    }
                   >
                     {sortLabels[s]}
                   </button>
@@ -647,7 +703,9 @@ export function App() {
               onClick={() => setViewMode("list")}
               className={cn(
                 "p-2 transition-colors",
-                viewMode === "list" ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                viewMode === "list"
+                  ? "bg-secondary text-primary"
+                  : "hover:bg-secondary/50",
               )}
             >
               <List className="h-4 w-4" />
@@ -656,7 +714,9 @@ export function App() {
               onClick={() => setViewMode("grid")}
               className={cn(
                 "p-2 transition-colors",
-                viewMode === "grid" ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                viewMode === "grid"
+                  ? "bg-secondary text-primary"
+                  : "hover:bg-secondary/50",
               )}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -682,12 +742,20 @@ export function App() {
 
         {/* Results */}
         <ScrollArea className="flex-1">
-          <div className={cn(
-            viewMode === "grid" ? "grid grid-cols-2 lg:grid-cols-3 gap-4 p-4" : "divide-y divide-border"
-          )}>
+          <div
+            className={cn(
+              viewMode === "grid"
+                ? "grid grid-cols-2 lg:grid-cols-3 gap-4 p-4"
+                : "divide-y divide-border",
+            )}
+          >
             {sortedTweets.length === 0 && !isLoading ? (
               <div className="col-span-full flex flex-col items-center justify-center py-12 text-muted-foreground">
-                <p>{searchQuery ? `No tweets found matching "${searchQuery}"` : "No tweets to display"}</p>
+                <p>
+                  {searchQuery
+                    ? `No tweets found matching "${searchQuery}"`
+                    : "No tweets to display"}
+                </p>
               </div>
             ) : (
               sortedTweets.map((tweet, index) => (
@@ -715,7 +783,9 @@ export function App() {
           {hasMore && sortedTweets.length > 0 && (
             <div className="p-4 text-center">
               <Button variant="outline" onClick={loadMore} disabled={isLoading}>
-                {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : null}
                 Load More
               </Button>
             </div>
@@ -724,7 +794,10 @@ export function App() {
       </main>
 
       {/* Create Collection Dialog */}
-      <Dialog open={createCollectionOpen} onOpenChange={setCreateCollectionOpen}>
+      <Dialog
+        open={createCollectionOpen}
+        onOpenChange={setCreateCollectionOpen}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Collection</DialogTitle>
@@ -739,7 +812,9 @@ export function App() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Description (optional)</label>
+              <label className="text-sm font-medium">
+                Description (optional)
+              </label>
               <Input
                 value={newCollectionDesc}
                 onChange={(e) => setNewCollectionDesc(e.target.value)}
@@ -755,7 +830,8 @@ export function App() {
                     onClick={() => setNewCollectionColor(color)}
                     className={cn(
                       "w-8 h-8 rounded-full transition-transform",
-                      newCollectionColor === color && "ring-2 ring-offset-2 ring-offset-background ring-white scale-110"
+                      newCollectionColor === color &&
+                        "ring-2 ring-offset-2 ring-offset-background ring-white scale-110",
                     )}
                     style={{ backgroundColor: color }}
                   />
@@ -764,10 +840,16 @@ export function App() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateCollectionOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setCreateCollectionOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleCreateCollection} disabled={!newCollectionName.trim()}>
+            <Button
+              onClick={handleCreateCollection}
+              disabled={!newCollectionName.trim()}
+            >
               Create
             </Button>
           </DialogFooter>
@@ -792,14 +874,20 @@ export function App() {
                   onClick={() => handleAddToCollection(collection.id)}
                   className="flex items-center gap-2 w-full p-3 rounded-md border border-border hover:bg-secondary transition-colors"
                 >
-                  <Folder className="h-4 w-4" style={{ color: collection.color }} />
+                  <Folder
+                    className="h-4 w-4"
+                    style={{ color: collection.color }}
+                  />
                   <span>{collection.name}</span>
                 </button>
               ))}
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAddToCollectionOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setAddToCollectionOpen(false)}
+            >
               Cancel
             </Button>
           </DialogFooter>
