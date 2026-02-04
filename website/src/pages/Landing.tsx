@@ -202,6 +202,30 @@ export default function Landing() {
               />
             </a>
           </div>
+
+          {/* Demo Video */}
+          <div
+            className="mt-16 animate-slide-up opacity-0"
+            style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
+          >
+            <div className="border-thick border-foreground bg-foreground p-1">
+              <video
+                className="w-full"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster=""
+              >
+                <source src="/demo.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <p className="text-center text-sm text-muted-foreground mt-3">
+              See Tweet Recall in action
+            </p>
+          </div>
         </div>
       </section>
 

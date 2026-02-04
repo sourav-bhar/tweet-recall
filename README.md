@@ -1,5 +1,14 @@
 # Tweet Recall
 
+https://github.com/sourav-bhar/tweet-recall/raw/main/assets/demo-compressed.mp4
+
+<p align="center">
+  <a href="https://tweetrecall.xyz">Website</a> •
+  <a href="#installation">Install</a> •
+  <a href="#features">Features</a> •
+  <a href="#privacy">Privacy</a>
+</p>
+
 - [Tweet Recall](#tweet-recall)
   - [Features](#features)
     - [Core Functionality](#core-functionality)
