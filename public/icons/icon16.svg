@@ -1,4 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="16" height="16" rx="3" fill="#1D9BF0"/>
-  <path d="M11.5 5.5L7 10L4.5 7.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Background with border -->
+  <rect width="16" height="16" rx="2" fill="#14161F"/>
+  <!-- Primary color fill -->
+  <rect x="1" y="1" width="14" height="14" rx="1" fill="#EB5630"/>
+  <!-- TR text -->
+  <text x="8" y="12" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" text-anchor="middle" fill="#FBFAF7">TR</text>
 </svg>

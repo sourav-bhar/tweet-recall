@@ -491,7 +491,7 @@
 
 .tweet-card__collection-btn:hover {
   color: var(--accent);
-  background: rgba(29, 155, 240, 0.1);
+  background: rgba(235, 86, 48, 0.1);
 }
 
 .tweet-card__favorite {

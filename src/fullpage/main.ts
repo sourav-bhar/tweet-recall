@@ -72,17 +72,25 @@ const state: AppState = {
 // DOM Elements
 const searchInput = document.getElementById("search-input") as HTMLInputElement;
 const resultsContainer = document.getElementById("results") as HTMLDivElement;
-const resultsCount = document.getElementById("results-count") as HTMLSpanElement;
+const resultsCount = document.getElementById(
+  "results-count",
+) as HTMLSpanElement;
 const activeFiltersContainer = document.getElementById(
-  "active-filters"
+  "active-filters",
 ) as HTMLDivElement;
-const loadMoreBtn = document.getElementById("load-more-btn") as HTMLButtonElement;
-const paginationContainer = document.getElementById("pagination") as HTMLDivElement;
+const loadMoreBtn = document.getElementById(
+  "load-more-btn",
+) as HTMLButtonElement;
+const paginationContainer = document.getElementById(
+  "pagination",
+) as HTMLDivElement;
 const statTotal = document.getElementById("stat-total") as HTMLSpanElement;
 const statAuthors = document.getElementById("stat-authors") as HTMLSpanElement;
 const exportBtn = document.getElementById("export-btn") as HTMLButtonElement;
 const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
-const announcements = document.getElementById("announcements") as HTMLDivElement;
+const announcements = document.getElementById(
+  "announcements",
+) as HTMLDivElement;
 
 // Sort elements
 const sortBtn = document.getElementById("sort-btn") as HTMLButtonElement;
@@ -94,26 +102,46 @@ const viewListBtn = document.getElementById("view-list") as HTMLButtonElement;
 const viewGridBtn = document.getElementById("view-grid") as HTMLButtonElement;
 
 // Media toggle
-const toggleMediaBtn = document.getElementById("toggle-media") as HTMLButtonElement;
+const toggleMediaBtn = document.getElementById(
+  "toggle-media",
+) as HTMLButtonElement;
 
 // Collection modal
-const collectionModal = document.getElementById("collection-modal") as HTMLDivElement;
-const collectionForm = document.getElementById("collection-form") as HTMLFormElement;
-const newCollectionBtn = document.getElementById("new-collection-btn") as HTMLButtonElement;
-const cancelCollectionBtn = document.getElementById("cancel-collection") as HTMLButtonElement;
-const collectionsList = document.getElementById("collections-list") as HTMLDivElement;
+const collectionModal = document.getElementById(
+  "collection-modal",
+) as HTMLDivElement;
+const collectionForm = document.getElementById(
+  "collection-form",
+) as HTMLFormElement;
+const newCollectionBtn = document.getElementById(
+  "new-collection-btn",
+) as HTMLButtonElement;
+const cancelCollectionBtn = document.getElementById(
+  "cancel-collection",
+) as HTMLButtonElement;
+const collectionsList = document.getElementById(
+  "collections-list",
+) as HTMLDivElement;
 
 // Add to collection modal
-const addToCollectionModal = document.getElementById("add-to-collection-modal") as HTMLDivElement;
-const addToCollectionList = document.getElementById("add-to-collection-list") as HTMLDivElement;
-const cancelAddToCollectionBtn = document.getElementById("cancel-add-to-collection") as HTMLButtonElement;
+const addToCollectionModal = document.getElementById(
+  "add-to-collection-modal",
+) as HTMLDivElement;
+const addToCollectionList = document.getElementById(
+  "add-to-collection-list",
+) as HTMLDivElement;
+const cancelAddToCollectionBtn = document.getElementById(
+  "cancel-add-to-collection",
+) as HTMLButtonElement;
 
 // Track which tweet is being added to collection
 let pendingTweetId: string | null = null;
 
 // Detail panel
 const detailPanel = document.getElementById("detail-panel") as HTMLElement;
-const closeDetailBtn = document.getElementById("close-detail") as HTMLButtonElement;
+const closeDetailBtn = document.getElementById(
+  "close-detail",
+) as HTMLButtonElement;
 
 // Debounce timer
 let searchDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -203,14 +231,17 @@ async function handleFavoriteToggle(tweetId: string, event: Event) {
       }
 
       const card = resultsContainer.querySelector(
-        `[data-tweet-id="${tweetId}"]`
+        `[data-tweet-id="${tweetId}"]`,
       ) as HTMLElement | null;
       if (card) {
         updateCardFavoriteState(card, response.isFavorited);
       }
 
       // If viewing favorites and unfavorited, remove from view
-      if (state.selectedCollection === "__favorites__" && !response.isFavorited) {
+      if (
+        state.selectedCollection === "__favorites__" &&
+        !response.isFavorited
+      ) {
         state.tweets = state.tweets.filter((t) => t.id !== tweetId);
         renderResults(false);
       }
@@ -234,7 +265,7 @@ function handleExpandToggle(tweetId: string, _event: Event) {
   const index = state.tweets.findIndex((t) => t.id === tweetId);
   if (index >= 0) {
     const oldCard = resultsContainer.querySelector(
-      `[data-tweet-id="${tweetId}"]`
+      `[data-tweet-id="${tweetId}"]`,
     );
     if (oldCard) {
       const newCard = renderTweetCard(state.tweets[index], {
@@ -417,7 +448,7 @@ async function loadTweets() {
     announce(
       state.tweets.length > 0
         ? `${state.tweets.length} tweets loaded`
-        : "No tweets found"
+        : "No tweets found",
     );
   } catch (error) {
     console.error("Failed to load tweets:", error);
@@ -507,7 +538,8 @@ async function loadFavoriteStates(tweetIds: string[]) {
  */
 function performSearch(query: string) {
   state.searchQuery = query;
-  const { query: parsedQuery, filters: parsedFilters } = parseSearchQuery(query);
+  const { query: parsedQuery, filters: parsedFilters } =
+    parseSearchQuery(query);
   state.parsedQuery = parsedQuery;
   state.filters = mergeFilters(state.filters, parsedFilters);
   renderActiveFilters();
@@ -549,7 +581,11 @@ async function loadCollections() {
  */
 function renderCollections() {
   // Remove dynamic collections (keep "All Tweets" and "Favorites")
-  collectionsList.querySelectorAll("[data-collection]:not([data-collection='all']):not([data-collection='__favorites__'])").forEach((el) => el.remove());
+  collectionsList
+    .querySelectorAll(
+      "[data-collection]:not([data-collection='all']):not([data-collection='__favorites__'])",
+    )
+    .forEach((el) => el.remove());
 
   // Add custom collections
   state.collections
@@ -604,7 +640,7 @@ function selectCollection(collectionId: string) {
   collectionsList.querySelectorAll(".sidebar__collection").forEach((btn) => {
     btn.classList.toggle(
       "active",
-      btn.getAttribute("data-collection") === collectionId
+      btn.getAttribute("data-collection") === collectionId,
     );
   });
 
@@ -618,7 +654,7 @@ function updateTimeFilterUI() {
   document.querySelectorAll(".sidebar__option[data-filter]").forEach((btn) => {
     btn.classList.toggle(
       "active",
-      btn.getAttribute("data-filter") === state.timeFilter
+      btn.getAttribute("data-filter") === state.timeFilter,
     );
   });
 }
@@ -671,7 +707,11 @@ async function clearData() {
 /**
  * Create new collection
  */
-async function createCollection(name: string, description: string, color: string) {
+async function createCollection(
+  name: string,
+  description: string,
+  color: string,
+) {
   try {
     const response = await sendMessage({
       type: "CREATE_COLLECTION",
@@ -699,7 +739,11 @@ async function deleteCollection(collectionId: string) {
   const collection = state.collections.find((c) => c.id === collectionId);
   if (!collection) return;
 
-  if (!confirm(`Delete collection "${collection.name}"? Tweets will not be deleted.`)) {
+  if (
+    !confirm(
+      `Delete collection "${collection.name}"? Tweets will not be deleted.`,
+    )
+  ) {
     return;
   }
 
@@ -710,7 +754,9 @@ async function deleteCollection(collectionId: string) {
     });
 
     if (response.type === "COLLECTION_DELETED") {
-      state.collections = state.collections.filter((c) => c.id !== collectionId);
+      state.collections = state.collections.filter(
+        (c) => c.id !== collectionId,
+      );
       renderCollections();
 
       // If we were viewing this collection, switch to "all"
@@ -850,7 +896,11 @@ function handleKeydown(e: KeyboardEvent) {
     case "Enter":
     case "o":
       if (state.selectedIndex >= 0 && state.tweets[state.selectedIndex]) {
-        window.open(state.tweets[state.selectedIndex].url, "_blank", "noopener");
+        window.open(
+          state.tweets[state.selectedIndex].url,
+          "_blank",
+          "noopener",
+        );
       }
       break;
 
@@ -858,7 +908,7 @@ function handleKeydown(e: KeyboardEvent) {
       if (state.selectedIndex >= 0 && state.tweets[state.selectedIndex]) {
         handleFavoriteToggle(
           state.tweets[state.selectedIndex].id,
-          new Event("keypress")
+          new Event("keypress"),
         );
       }
       break;
@@ -986,7 +1036,10 @@ document.querySelectorAll(".sort-option").forEach((btn) => {
 
 // Close sort menu when clicking outside
 document.addEventListener("click", (e) => {
-  if (!sortBtn.contains(e.target as Node) && !sortMenu.contains(e.target as Node)) {
+  if (
+    !sortBtn.contains(e.target as Node) &&
+    !sortMenu.contains(e.target as Node)
+  ) {
     sortMenu.classList.add("hidden");
   }
 });
@@ -1015,37 +1068,51 @@ toggleMediaBtn.addEventListener("click", () => {
 });
 
 // Collections
-document.querySelector("[data-collection='all']")?.addEventListener("click", () => {
-  selectCollection("all");
-});
+document
+  .querySelector("[data-collection='all']")
+  ?.addEventListener("click", () => {
+    selectCollection("all");
+  });
 
-document.querySelector("[data-collection='__favorites__']")?.addEventListener("click", () => {
-  selectCollection("__favorites__");
-});
+document
+  .querySelector("[data-collection='__favorites__']")
+  ?.addEventListener("click", () => {
+    selectCollection("__favorites__");
+  });
 
 // New collection
 newCollectionBtn.addEventListener("click", openModal);
 cancelCollectionBtn.addEventListener("click", closeModal);
 
-collectionModal.querySelector(".modal__backdrop")?.addEventListener("click", closeModal);
+collectionModal
+  .querySelector(".modal__backdrop")
+  ?.addEventListener("click", closeModal);
 
 collectionForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const nameInput = document.getElementById("collection-name") as HTMLInputElement;
-  const descInput = document.getElementById("collection-description") as HTMLInputElement;
-  const colorBtn = collectionForm.querySelector(".color-option.selected") as HTMLButtonElement;
+  const nameInput = document.getElementById(
+    "collection-name",
+  ) as HTMLInputElement;
+  const descInput = document.getElementById(
+    "collection-description",
+  ) as HTMLInputElement;
+  const colorBtn = collectionForm.querySelector(
+    ".color-option.selected",
+  ) as HTMLButtonElement;
 
   createCollection(
     nameInput.value,
     descInput.value,
-    colorBtn?.getAttribute("data-color") || "#1d9bf0"
+    colorBtn?.getAttribute("data-color") || "#EB5630",
   );
 });
 
 // Color picker
 collectionForm.querySelectorAll(".color-option").forEach((btn) => {
   btn.addEventListener("click", () => {
-    collectionForm.querySelectorAll(".color-option").forEach((b) => b.classList.remove("selected"));
+    collectionForm
+      .querySelectorAll(".color-option")
+      .forEach((b) => b.classList.remove("selected"));
     btn.classList.add("selected");
   });
 });
@@ -1056,7 +1123,9 @@ clearBtn.addEventListener("click", clearData);
 
 // Add to collection modal
 cancelAddToCollectionBtn.addEventListener("click", closeAddToCollectionModal);
-addToCollectionModal.querySelector(".modal__backdrop")?.addEventListener("click", closeAddToCollectionModal);
+addToCollectionModal
+  .querySelector(".modal__backdrop")
+  ?.addEventListener("click", closeAddToCollectionModal);
 
 // Detail panel
 closeDetailBtn.addEventListener("click", () => {

@@ -11,6 +11,7 @@ import {
   Moon,
   Monitor,
   X,
+  Globe,
 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Button } from "@/components/ui/button";
@@ -597,6 +598,16 @@ export function App() {
             </div>
 
             <div className="border-t border-border pt-4 flex flex-col gap-3">
+              <Button
+                variant="outline"
+                onClick={() =>
+                  window.open("https://tweetrecall.com", "_blank", "noopener")
+                }
+                className="justify-start"
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                Visit Website
+              </Button>
               <Button
                 variant="outline"
                 onClick={handleExport}

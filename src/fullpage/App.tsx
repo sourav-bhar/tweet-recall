@@ -15,6 +15,7 @@ import {
   Sun,
   Moon,
   Monitor,
+  Globe,
 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Button } from "@/components/ui/button";
@@ -51,7 +52,7 @@ type ViewMode = "list" | "grid";
 type TimeFilter = "all" | "today" | "week" | "month";
 
 const COLORS = [
-  "#f4212e",
+  "#EB5630",
   "#ff7a00",
   "#ffd700",
   "#00ba7c",
@@ -90,7 +91,7 @@ export function App() {
   const [pendingTweetId, setPendingTweetId] = useState<string | null>(null);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [newCollectionDesc, setNewCollectionDesc] = useState("");
-  const [newCollectionColor, setNewCollectionColor] = useState("#1d9bf0");
+  const [newCollectionColor, setNewCollectionColor] = useState("#EB5630");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
 
   // Lightbox state
@@ -391,7 +392,7 @@ export function App() {
         setCreateCollectionOpen(false);
         setNewCollectionName("");
         setNewCollectionDesc("");
-        setNewCollectionColor("#1d9bf0");
+        setNewCollectionColor("#EB5630");
       }
     } catch (error) {
       console.error("Failed to create collection:", error);
@@ -660,6 +661,17 @@ export function App() {
               </button>
             </div>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start"
+            onClick={() =>
+              window.open("https://tweetrecall.com", "_blank", "noopener")
+            }
+          >
+            <Globe className="h-4 w-4 mr-2" />
+            Visit Website
+          </Button>
           <Button
             variant="ghost"
             size="sm"
