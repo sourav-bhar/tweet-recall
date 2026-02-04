@@ -1,104 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tweet Recall</title>
-    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="container">
-      <!-- Header -->
-      <header class="header">
-        <h1>Tweet Recall</h1>
-        <div class="header__actions">
-          <button id="fullpage-btn" class="icon-btn" title="Open Full View">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-          </button>
-          <button id="settings-btn" class="icon-btn" title="Settings">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-          </button>
-        </div>
-      </header>
-
-      <!-- Search -->
-      <div class="search-container">
-        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search your tweet history..."
-          autocomplete="off"
-          autofocus
-        />
-        <kbd class="shortcut">⌘K</kbd>
-      </div>
-
-      <!-- View Tabs -->
-      <div class="view-tabs">
-        <button id="tab-recent" class="view-tab active" data-tab="recent">Recent</button>
-        <button id="tab-favorites" class="view-tab" data-tab="favorites">Favorites</button>
-      </div>
-
-      <!-- Filter Row -->
-      <div id="filter-row" class="filter-row hidden">
-        <div id="active-filters" class="filter-chips"></div>
-      </div>
-
-      <!-- Stats bar -->
-      <div class="stats-bar">
-        <span id="stats-text">Loading...</span>
-      </div>
-
-      <!-- Results -->
-      <div id="results" class="results" role="listbox" aria-label="Tweet results">
-        <div class="empty-state">
-          <p>Loading tweets...</p>
-        </div>
-      </div>
-
-      <!-- Loading indicator -->
-      <div id="loading-indicator" class="loading-indicator hidden">
-        <div class="spinner"></div>
-      </div>
-
-      <!-- Settings panel (hidden by default) -->
-      <div id="settings-panel" class="settings-panel hidden">
-        <h2>Settings</h2>
-        <div class="settings-content">
-          <button id="export-btn" class="settings-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Export Data (JSON)
-          </button>
-          <button id="clear-btn" class="settings-btn danger">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-            Clear All Data
-          </button>
-        </div>
-        <button id="close-settings" class="close-btn">Close</button>
-      </div>
-
-      <!-- Announcements for screen readers -->
-      <div id="announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
-    </div>
-
-    <script type="module" src="./main.ts"></script>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
   </body>
 </html>

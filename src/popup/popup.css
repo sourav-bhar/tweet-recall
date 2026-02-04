@@ -1,0 +1,15 @@
+/* Popup specific styles */
+html,
+body,
+#root {
+  width: 400px;
+  height: 600px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Show external link on hover */
+.tweet-card:hover .absolute.opacity-0 {
+  opacity: 1;
+}

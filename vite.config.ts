@@ -1,9 +1,16 @@
 import { defineConfig } from "vite";
 import { crx } from "@crxjs/vite-plugin";
+import react from "@vitejs/plugin-react";
+import path from "path";
 import manifest from "./manifest.json";
 
 export default defineConfig(({ mode }) => ({
-  plugins: [crx({ manifest })],
+  plugins: [react(), crx({ manifest })],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   build: {
     rollupOptions: {
       input: {
