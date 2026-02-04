@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useState } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 function BrandMark() {
   return (
@@ -25,6 +26,7 @@ function BrandMark() {
 export default function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
     { path: "/", label: "Home" },
@@ -56,6 +58,17 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            <button
+              onClick={toggleTheme}
+              className="ml-2 w-10 h-10 border-thick border-foreground flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              {theme === "light" ? (
+                <Moon className="w-5 h-5" strokeWidth={2.5} />
+              ) : (
+                <Sun className="w-5 h-5" strokeWidth={2.5} />
+              )}
+            </button>
             <a
               href="https://github.com/sourav-bhar/tweet-recall"
               target="_blank"
@@ -96,6 +109,22 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <button
+                onClick={toggleTheme}
+                className="py-3 px-4 text-sm font-semibold uppercase tracking-wide hover:bg-muted transition-colors text-left flex items-center gap-2"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="w-4 h-4" strokeWidth={2.5} />
+                    Dark Mode
+                  </>
+                ) : (
+                  <>
+                    <Sun className="w-4 h-4" strokeWidth={2.5} />
+                    Light Mode
+                  </>
+                )}
+              </button>
               <a
                 href="https://github.com/sourav-bhar/tweet-recall"
                 target="_blank"
