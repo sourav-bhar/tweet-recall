@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { TweetCard } from "@/components/TweetCard";
+import { ImageLightbox } from "@/components/ImageLightbox";
 import { sendMessage } from "@/shared/utils/messaging";
 import { formatNumber } from "@/shared/utils/formatting";
 import { parseSearchQuery, mergeFilters } from "@/shared/utils/searchOperators";
@@ -71,7 +72,7 @@ export function App() {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [showMedia, setShowMedia] = useState(false);
+  const [showMedia, setShowMedia] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -91,6 +92,11 @@ export function App() {
   const [newCollectionDesc, setNewCollectionDesc] = useState("");
   const [newCollectionColor, setNewCollectionColor] = useState("#1d9bf0");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
+
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -146,30 +152,33 @@ export function App() {
     }
   };
 
-  const getEffectiveFilters = useCallback((): TweetFilters => {
-    const baseFilters: TweetFilters = { ...filters };
+  const getEffectiveFilters = useCallback(
+    (overrideFilters?: TweetFilters): TweetFilters => {
+      const baseFilters: TweetFilters = { ...(overrideFilters ?? filters) };
 
-    // Time filter
-    const now = Date.now();
-    switch (timeFilter) {
-      case "today":
-        baseFilters.seenAfter = now - 24 * 60 * 60 * 1000;
-        break;
-      case "week":
-        baseFilters.seenAfter = now - 7 * 24 * 60 * 60 * 1000;
-        break;
-      case "month":
-        baseFilters.seenAfter = now - 30 * 24 * 60 * 60 * 1000;
-        break;
-    }
+      // Time filter
+      const now = Date.now();
+      switch (timeFilter) {
+        case "today":
+          baseFilters.seenAfter = now - 24 * 60 * 60 * 1000;
+          break;
+        case "week":
+          baseFilters.seenAfter = now - 7 * 24 * 60 * 60 * 1000;
+          break;
+        case "month":
+          baseFilters.seenAfter = now - 30 * 24 * 60 * 60 * 1000;
+          break;
+      }
 
-    // Collection filter
-    if (selectedCollection !== "all") {
-      baseFilters.collectionId = selectedCollection;
-    }
+      // Collection filter
+      if (selectedCollection !== "all") {
+        baseFilters.collectionId = selectedCollection;
+      }
 
-    return baseFilters;
-  }, [filters, timeFilter, selectedCollection]);
+      return baseFilters;
+    },
+    [filters, timeFilter, selectedCollection],
+  );
 
   const loadFavoriteStates = async (tweetIds: string[]) => {
     const newFavorited = new Set(favoritedIds);
@@ -189,22 +198,27 @@ export function App() {
     setFavoritedIds(newFavorited);
   };
 
-  const loadTweets = async () => {
+  const loadTweets = async (
+    overrideQuery?: string,
+    overrideFilters?: TweetFilters,
+  ) => {
     setIsLoading(true);
     setCursor(null);
     setHasMore(true);
     setTweets([]);
     setSelectedIndex(-1);
 
-    const effectiveFilters = getEffectiveFilters();
-    const hasTextQuery = parsedQuery.trim().length > 0;
-    const hasFilters = Object.keys(filters).length > 0;
+    const queryToUse = overrideQuery ?? parsedQuery;
+    const filtersToUse = overrideFilters ?? filters;
+    const effectiveFilters = getEffectiveFilters(filtersToUse);
+    const hasTextQuery = queryToUse.trim().length > 0;
+    const hasFilters = Object.keys(filtersToUse).length > 0;
 
     try {
       if (hasTextQuery || hasFilters) {
         const response = await sendMessage({
           type: "SEARCH_WITH_FILTERS",
-          query: parsedQuery,
+          query: queryToUse,
           filters: effectiveFilters,
           limit: PAGE_SIZE,
         });
@@ -291,11 +305,33 @@ export function App() {
 
     searchDebounceRef.current = setTimeout(() => {
       const { query: parsed, filters: parsedFilters } = parseSearchQuery(query);
+      const newFilters = mergeFilters({}, parsedFilters);
       setParsedQuery(parsed);
-      setFilters(mergeFilters(filters, parsedFilters));
-      loadTweets();
+      setFilters(newFilters);
+      // Pass values directly to avoid stale closure
+      loadTweets(parsed, newFilters);
     }, SEARCH_DEBOUNCE_MS);
   };
+
+  const clearSearch = () => {
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    setSearchQuery("");
+    setParsedQuery("");
+    setFilters({});
+    loadTweets("", {});
+    searchInputRef.current?.focus();
+  };
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, []);
 
   const handleFavoriteToggle = async (tweetId: string) => {
     try {
@@ -330,6 +366,13 @@ export function App() {
       }
       return newSet;
     });
+  };
+
+  const handleImageClick = (imageUrl: string, allImages: string[]) => {
+    const index = allImages.indexOf(imageUrl);
+    setLightboxImages(allImages);
+    setLightboxIndex(index >= 0 ? index : 0);
+    setLightboxOpen(true);
   };
 
   const handleCreateCollection = async () => {
@@ -650,8 +693,17 @@ export function App() {
               placeholder="Search tweets... (try from:username, has:media)"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="pl-9"
+              className="pl-9 pr-9"
             />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           {/* Sort */}
@@ -773,6 +825,7 @@ export function App() {
                     setPendingTweetId(tweet.id);
                     setAddToCollectionOpen(true);
                   }}
+                  onImageClick={handleImageClick}
                   onClick={() => window.open(tweet.url, "_blank", "noopener")}
                 />
               ))
@@ -893,6 +946,15 @@ export function App() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onNavigate={setLightboxIndex}
+      />
     </div>
   );
 }

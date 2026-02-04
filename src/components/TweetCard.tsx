@@ -26,6 +26,7 @@ interface TweetCardProps {
   onFavoriteClick?: () => void;
   onExpandClick?: () => void;
   onAddToCollection?: () => void;
+  onImageClick?: (imageUrl: string, allImages: string[]) => void;
   onClick?: () => void;
 }
 
@@ -57,6 +58,7 @@ export const TweetCard = memo(function TweetCard({
   onFavoriteClick,
   onExpandClick,
   onAddToCollection,
+  onImageClick,
   onClick,
 }: TweetCardProps) {
   const avatarColor = stringToColor(tweet.author);
@@ -68,7 +70,7 @@ export const TweetCard = memo(function TweetCard({
     <article
       className={cn(
         "tweet-card relative flex gap-2.5 p-2.5 cursor-pointer transition-colors hover:bg-secondary/50",
-        isSelected && "bg-secondary border-l-2 border-l-primary"
+        isSelected && "bg-secondary border-l-2 border-l-primary",
       )}
       onClick={onClick}
       role="option"
@@ -84,15 +86,13 @@ export const TweetCard = memo(function TweetCard({
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-1 flex-wrap mb-0.5">
           <span className="font-semibold text-sm text-foreground truncate">
             {tweet.authorName}
           </span>
-          <span className="text-xs text-muted-foreground">
-            @{tweet.author}
-          </span>
+          <span className="text-xs text-muted-foreground">@{tweet.author}</span>
           <span className="text-xs text-muted-foreground">·</span>
           <span
             className="text-xs text-muted-foreground"
@@ -125,7 +125,7 @@ export const TweetCard = memo(function TweetCard({
               className={cn(
                 "h-6 w-6",
                 isFavorited && "text-yellow-500",
-                !onAddToCollection && "ml-auto"
+                !onAddToCollection && "ml-auto",
               )}
               onClick={(e) => {
                 e.stopPropagation();
@@ -146,7 +146,7 @@ export const TweetCard = memo(function TweetCard({
             rel="noopener noreferrer"
             className={cn(
               "h-6 w-6 flex items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-secondary/50 transition-colors",
-              !onFavoriteClick && !onAddToCollection && "ml-auto"
+              !onFavoriteClick && !onAddToCollection && "ml-auto",
             )}
             onClick={(e) => e.stopPropagation()}
             title="Open on X"
@@ -158,8 +158,8 @@ export const TweetCard = memo(function TweetCard({
         {/* Text */}
         <p
           className={cn(
-            "text-[13px] leading-snug text-foreground whitespace-pre-wrap wrap-break-word",
-            shouldTruncate && "line-clamp-3"
+            "text-[13px] leading-snug text-foreground whitespace-pre-wrap break-words",
+            shouldTruncate && "line-clamp-3",
           )}
         >
           {tweet.text}
@@ -192,29 +192,47 @@ export const TweetCard = memo(function TweetCard({
         {showMedia && tweet.mediaUrls && tweet.mediaUrls.length > 0 && (
           <div
             className={cn(
-              "mt-2 grid gap-0.5 rounded-lg overflow-hidden",
-              tweet.mediaUrls.length === 1 && "grid-cols-1",
-              tweet.mediaUrls.length === 2 && "grid-cols-2",
-              tweet.mediaUrls.length >= 3 && "grid-cols-2 grid-rows-2"
+              "mt-2 rounded-lg overflow-hidden max-w-lg",
+              tweet.mediaUrls.length === 1 && "inline-block",
+              tweet.mediaUrls.length >= 2 && "grid gap-0.5 grid-cols-2",
             )}
           >
             {tweet.mediaUrls.slice(0, 4).map((url, index) => (
-              <div
+              <button
                 key={index}
-                className="relative aspect-video bg-muted overflow-hidden"
+                type="button"
+                className={cn(
+                  "relative bg-muted overflow-hidden rounded-md cursor-pointer hover:opacity-90 transition-opacity",
+                  tweet.mediaUrls && tweet.mediaUrls.length === 1
+                    ? "max-h-80"
+                    : "aspect-square",
+                )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onImageClick && tweet.mediaUrls) {
+                    onImageClick(url, tweet.mediaUrls);
+                  }
+                }}
               >
                 <img
                   src={url}
                   alt={`Tweet media ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className={cn(
+                    "w-full h-full",
+                    tweet.mediaUrls && tweet.mediaUrls.length === 1
+                      ? "object-contain"
+                      : "object-cover",
+                  )}
                   loading="lazy"
                 />
-                {index === 3 && tweet.mediaUrls && tweet.mediaUrls.length > 4 && (
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white font-bold text-xl">
-                    +{tweet.mediaUrls.length - 4}
-                  </div>
-                )}
-              </div>
+                {index === 3 &&
+                  tweet.mediaUrls &&
+                  tweet.mediaUrls.length > 4 && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white font-bold text-xl">
+                      +{tweet.mediaUrls.length - 4}
+                    </div>
+                  )}
+              </button>
             ))}
           </div>
         )}
@@ -224,9 +242,11 @@ export const TweetCard = memo(function TweetCard({
           <div className="mt-1.5 p-1.5 rounded-md border border-border bg-muted/30">
             <div className="flex items-center gap-1 mb-0.5 text-muted-foreground">
               <Quote className="h-2.5 w-2.5" />
-              <span className="text-[10px]">@{tweet.quotedAuthor || "unknown"}</span>
+              <span className="text-[10px]">
+                @{tweet.quotedAuthor || "unknown"}
+              </span>
             </div>
-            <p className="text-[11px] text-foreground line-clamp-2">
+            <p className="text-[11px] text-foreground line-clamp-2 break-words">
               {tweet.quotedText}
             </p>
           </div>

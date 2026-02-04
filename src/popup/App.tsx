@@ -10,6 +10,7 @@ import {
   Sun,
   Moon,
   Monitor,
+  X,
 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Button } from "@/components/ui/button";
@@ -85,13 +86,16 @@ export function App() {
     }
   };
 
-  const getEffectiveFilters = useCallback((): TweetFilters => {
-    const baseFilters = { ...filters };
-    if (viewMode === "favorites") {
-      baseFilters.collectionId = "__favorites__";
-    }
-    return baseFilters;
-  }, [filters, viewMode]);
+  const getEffectiveFilters = useCallback(
+    (overrideFilters?: TweetFilters): TweetFilters => {
+      const baseFilters = { ...(overrideFilters ?? filters) };
+      if (viewMode === "favorites") {
+        baseFilters.collectionId = "__favorites__";
+      }
+      return baseFilters;
+    },
+    [filters, viewMode],
+  );
 
   const loadFavoriteStates = async (tweetIds: string[]) => {
     const newFavorited = new Set(favoritedIds);
@@ -111,22 +115,27 @@ export function App() {
     setFavoritedIds(newFavorited);
   };
 
-  const loadTweets = async () => {
+  const loadTweets = async (
+    overrideQuery?: string,
+    overrideFilters?: TweetFilters,
+  ) => {
     setIsLoading(true);
     setCursor(null);
     setHasMore(true);
     setTweets([]);
     setSelectedIndex(-1);
 
-    const effectiveFilters = getEffectiveFilters();
-    const hasTextQuery = parsedQuery.trim().length > 0;
-    const hasFilters = Object.keys(filters).length > 0;
+    const queryToUse = overrideQuery ?? parsedQuery;
+    const filtersToUse = overrideFilters ?? filters;
+    const effectiveFilters = getEffectiveFilters(filtersToUse);
+    const hasTextQuery = queryToUse.trim().length > 0;
+    const hasFilters = Object.keys(filtersToUse).length > 0;
 
     try {
       if (hasTextQuery || hasFilters) {
         const response = await sendMessage({
           type: "SEARCH_WITH_FILTERS",
-          query: parsedQuery,
+          query: queryToUse,
           filters: effectiveFilters,
           limit: PAGE_SIZE,
         });
@@ -213,10 +222,23 @@ export function App() {
 
     searchDebounceRef.current = setTimeout(() => {
       const { query: parsed, filters: parsedFilters } = parseSearchQuery(query);
+      const newFilters = mergeFilters({}, parsedFilters);
       setParsedQuery(parsed);
-      setFilters(mergeFilters(filters, parsedFilters));
-      loadTweets();
+      setFilters(newFilters);
+      // Pass values directly to avoid stale closure
+      loadTweets(parsed, newFilters);
     }, SEARCH_DEBOUNCE_MS);
+  };
+
+  const clearSearch = () => {
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    setSearchQuery("");
+    setParsedQuery("");
+    setFilters({});
+    loadTweets("", {});
+    searchInputRef.current?.focus();
   };
 
   const handleFavoriteToggle = async (tweetId: string) => {
@@ -302,14 +324,21 @@ export function App() {
     });
   };
 
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (document.activeElement === searchInputRef.current) {
         if (e.key === "Escape") {
-          setSearchQuery("");
-          setParsedQuery("");
-          loadTweets();
+          clearSearch();
         } else if (e.key === "ArrowDown") {
           e.preventDefault();
           searchInputRef.current?.blur();
@@ -422,9 +451,19 @@ export function App() {
           onChange={(e) => handleSearch(e.target.value)}
           className="pl-8 pr-10 h-8 text-sm"
         />
-        <kbd className="absolute right-4.5 top-1/2 -translate-y-1/2 pointer-events-none text-[10px] text-muted-foreground bg-muted px-1 py-0.5 rounded">
-          ⌘K
-        </kbd>
+        {searchQuery ? (
+          <button
+            onClick={clearSearch}
+            className="absolute right-4.5 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Clear search"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        ) : (
+          <kbd className="absolute right-4.5 top-1/2 -translate-y-1/2 pointer-events-none text-[10px] text-muted-foreground bg-muted px-1 py-0.5 rounded">
+            /
+          </kbd>
+        )}
       </div>
 
       {/* Tabs */}
