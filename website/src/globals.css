@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @theme {
   --color-background: hsl(var(--background));
@@ -14,43 +15,58 @@
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-border: hsl(var(--border));
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --color-cream: hsl(var(--cream));
+  --color-coral: hsl(var(--coral));
+  --color-coral-dark: hsl(var(--coral-dark));
+  --color-ink: hsl(var(--ink));
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
+
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 9%;
-    --primary: 204 88% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 94%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 204 88% 53%;
-    --accent-foreground: 0 0% 100%;
-    --border: 0 0% 85%;
-    --radius: 0.5rem;
+    --background: 48 20% 96%;
+    --foreground: 220 20% 10%;
+    --card: 48 30% 98%;
+    --card-foreground: 220 20% 10%;
+    --primary: 10 85% 57%;
+    --primary-foreground: 48 20% 98%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 48 20% 96%;
+    --muted: 48 15% 90%;
+    --muted-foreground: 220 10% 45%;
+    --accent: 10 85% 57%;
+    --accent-foreground: 48 20% 98%;
+    --border: 220 20% 10%;
+    --cream: 48 30% 94%;
+    --coral: 10 85% 57%;
+    --coral-dark: 10 75% 45%;
+    --ink: 220 20% 10%;
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 95%;
-    --primary: 204 88% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 18%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 22%;
-    --muted-foreground: 0 0% 64%;
-    --accent: 204 88% 53%;
-    --accent-foreground: 0 0% 100%;
-    --border: 0 0% 28%;
+    --background: 220 20% 8%;
+    --foreground: 48 20% 94%;
+    --card: 220 18% 12%;
+    --card-foreground: 48 20% 94%;
+    --primary: 10 85% 60%;
+    --primary-foreground: 220 20% 8%;
+    --secondary: 48 20% 94%;
+    --secondary-foreground: 220 20% 8%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 48 10% 60%;
+    --accent: 10 85% 60%;
+    --accent-foreground: 220 20% 8%;
+    --border: 48 20% 80%;
+    --cream: 48 15% 20%;
+    --coral: 10 85% 60%;
+    --coral-dark: 10 75% 50%;
+    --ink: 48 20% 94%;
   }
 
   * {
@@ -64,25 +80,160 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
+    font-family: var(--font-body);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  code, pre, .mono {
+    font-family: var(--font-mono);
   }
 }
 
+/* Utility classes */
+.border-thick {
+  border-width: 3px;
+}
+
+.border-chunky {
+  border-width: 4px;
+}
+
+.text-display {
+  font-family: var(--font-display);
+}
+
+.text-mono {
+  font-family: var(--font-mono);
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border-radius: 4px;
+  background: hsl(var(--border));
+  border: 3px solid hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
+  background: hsl(var(--foreground));
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Diagonal stripe pattern */
+.pattern-diagonal {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    hsl(var(--border) / 0.1) 4px,
+    hsl(var(--border) / 0.1) 8px
+  );
+}
+
+/* Grid pattern */
+.pattern-grid {
+  background-image:
+    linear-gradient(hsl(var(--border) / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Dot pattern */
+.pattern-dots {
+  background-image: radial-gradient(hsl(var(--border) / 0.3) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Animation utilities */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Border shift effect */
+.border-shift {
+  position: relative;
+}
+
+.border-shift::after {
+  content: '';
+  position: absolute;
+  inset: 4px -4px -4px 4px;
+  border: 3px solid hsl(var(--primary));
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.border-shift:hover::after {
+  transform: translate(-4px, -4px);
 }

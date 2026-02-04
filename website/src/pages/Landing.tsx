@@ -7,25 +7,41 @@ import {
   Eye,
   Database,
   ArrowRight,
-  CheckCircle,
+  ArrowUpRight,
+  type LucideIcon,
 } from "lucide-react";
 
 function FeatureCard({
   icon: Icon,
   title,
   description,
+  index,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   title: string;
   description: string;
+  index: number;
 }) {
   return (
-    <div className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors">
-      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-        <Icon className="w-6 h-6 text-primary" />
+    <div
+      className="group bg-card border-thick border-foreground p-6 hover-lift animate-slide-up opacity-0"
+      style={{
+        animationDelay: `${index * 100}ms`,
+        animationFillMode: "forwards",
+      }}
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className="w-14 h-14 border-thick border-foreground flex items-center justify-center bg-primary text-primary-foreground">
+          <Icon className="w-7 h-7" strokeWidth={2.5} />
+        </div>
+        <span className="text-mono text-sm text-muted-foreground">
+          0{index + 1}
+        </span>
       </div>
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground text-sm">{description}</p>
+      <h3 className="text-xl font-bold mb-2 tracking-tight">{title}</h3>
+      <p className="text-muted-foreground text-sm leading-relaxed">
+        {description}
+      </p>
     </div>
   );
 }
@@ -40,13 +56,32 @@ function StepCard({
   description: string;
 }) {
   return (
-    <div className="flex gap-4">
-      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-        {number}
+    <div
+      className="flex gap-6 items-start animate-slide-in-right opacity-0"
+      style={{
+        animationDelay: `${number * 150}ms`,
+        animationFillMode: "forwards",
+      }}
+    >
+      <div className="flex-shrink-0 w-16 h-16 border-thick border-foreground bg-foreground text-background flex items-center justify-center">
+        <span className="text-mono text-2xl font-bold">{number}</span>
       </div>
-      <div>
-        <h3 className="font-semibold mb-1">{title}</h3>
-        <p className="text-muted-foreground text-sm">{description}</p>
+      <div className="pt-2">
+        <h3 className="font-bold text-lg mb-1">{title}</h3>
+        <p className="text-muted-foreground">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-mono text-4xl sm:text-5xl font-bold text-primary mb-1">
+        {value}
+      </div>
+      <div className="text-sm uppercase tracking-wide text-muted-foreground">
+        {label}
       </div>
     </div>
   );
@@ -86,7 +121,7 @@ export default function Landing() {
     },
     {
       icon: Download,
-      title: "Free & Open Source",
+      title: "Open Source",
       description:
         "MIT licensed. Inspect the code, contribute, or fork it for yourself.",
     },
@@ -112,89 +147,111 @@ export default function Landing() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-8">
-            <Shield className="w-4 h-4" />
-            100% Privacy-First
+      <section className="py-16 sm:py-24 px-4 sm:px-6 pattern-grid">
+        <div className="max-w-5xl mx-auto">
+          <div className="animate-fade-in">
+            <div className="inline-flex items-center gap-2 bg-foreground text-background px-4 py-2 text-sm font-bold uppercase tracking-wide mb-8">
+              <Shield className="w-4 h-4" strokeWidth={3} />
+              100% Local • Zero Tracking
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            Remember Every Tweet
-            <span className="text-primary"> You've Seen</span>
+          <h1
+            className="text-5xl sm:text-6xl lg:text-8xl font-extrabold tracking-tighter mb-6 animate-slide-up opacity-0"
+            style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
+          >
+            Remember
+            <br />
+            <span className="text-primary">Every Tweet</span>
+            <br />
+            You've Seen
           </h1>
 
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p
+            className="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-2xl leading-relaxed animate-slide-up opacity-0"
+            style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
+          >
             A Chrome extension that captures tweets as you browse and lets you
-            search through them later. All data stays local in your browser.
+            search through them later. Your data never leaves your device.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div
+            className="flex flex-col sm:flex-row gap-4 animate-slide-up opacity-0"
+            style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
+          >
             <Link
               to="/install"
-              className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              className="group inline-flex items-center justify-center gap-3 bg-primary text-primary-foreground px-8 py-5 font-bold text-lg uppercase tracking-wide border-thick border-foreground hover:bg-foreground hover:text-background transition-colors"
             >
               Install Now
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight
+                className="w-5 h-5 transition-transform group-hover:translate-x-1"
+                strokeWidth={3}
+              />
             </Link>
             <a
               href="https://github.com/sourav-bhar/tweet-recall"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-secondary/80 transition-colors"
+              className="group inline-flex items-center justify-center gap-3 bg-background text-foreground px-8 py-5 font-bold text-lg uppercase tracking-wide border-thick border-foreground hover:bg-foreground hover:text-background transition-colors"
             >
-              View on GitHub
+              View Source
+              <ArrowUpRight
+                className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                strokeWidth={3}
+              />
             </a>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              No account required
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              No data sent anywhere
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Open source
-            </div>
+      {/* Stats Bar */}
+      <section className="py-8 px-4 sm:px-6 bg-foreground text-background">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8">
+            <Stat value="0" label="Network Requests" />
+            <Stat value="100%" label="Local Storage" />
+            <Stat value="∞" label="Tweets Stored" />
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 bg-card/50">
+      <section className="py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Built for Privacy Enthusiasts
+          <div className="mb-16">
+            <span className="text-mono text-sm uppercase tracking-wide text-primary mb-4 block">
+              Features
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mb-4">
+              Built for Privacy
+              <br />
+              Enthusiasts
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-xl text-lg">
               Tweet Recall is designed from the ground up with privacy as the
               core principle. Your data never leaves your device.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <FeatureCard key={feature.title} {...feature} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {features.map((feature, index) => (
+              <FeatureCard key={feature.title} {...feature} index={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 px-4 sm:px-6">
+      <section className="py-20 px-4 sm:px-6 bg-cream pattern-diagonal">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <div className="mb-16">
+            <span className="text-mono text-sm uppercase tracking-wide text-primary mb-4 block">
               How It Works
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+              Three Simple Steps
             </h2>
-            <p className="text-muted-foreground">
-              Get started in three simple steps.
-            </p>
           </div>
 
           <div className="space-y-8">
@@ -203,35 +260,46 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-16">
             <Link
               to="/install"
-              className="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
+              className="inline-flex items-center gap-2 text-foreground font-bold uppercase tracking-wide border-b-thick border-primary pb-1 hover:text-primary transition-colors"
             >
               View detailed installation guide
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" strokeWidth={3} />
             </Link>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 bg-primary/5">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Ready to Remember?
-          </h2>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Stop losing interesting tweets. Install Tweet Recall and build your
-            personal, searchable archive.
-          </p>
-          <Link
-            to="/install"
-            className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-          >
-            Get Started
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+      <section className="py-20 px-4 sm:px-6 bg-foreground text-background">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mb-4">
+                Ready to
+                <br />
+                <span className="text-primary">Remember?</span>
+              </h2>
+              <p className="text-background/70 max-w-md text-lg">
+                Stop losing interesting tweets. Install Tweet Recall and build
+                your personal, searchable archive.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <Link
+                to="/install"
+                className="group inline-flex items-center justify-center gap-3 bg-primary text-primary-foreground px-10 py-6 font-bold text-xl uppercase tracking-wide border-thick border-background hover:bg-background hover:text-foreground transition-colors"
+              >
+                Get Started
+                <ArrowRight
+                  className="w-6 h-6 transition-transform group-hover:translate-x-1"
+                  strokeWidth={3}
+                />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

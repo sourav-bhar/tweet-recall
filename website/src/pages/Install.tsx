@@ -5,14 +5,16 @@ import {
   Settings,
   ToggleRight,
   Pin,
-  CheckCircle,
+  Check,
   ExternalLink,
   AlertCircle,
+  ArrowRight,
+  type LucideIcon,
 } from "lucide-react";
 
 interface InstallStepProps {
   number: number;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   title: string;
   description: string;
   tip?: string;
@@ -26,25 +28,48 @@ function InstallStep({
   tip,
 }: InstallStepProps) {
   return (
-    <div className="flex gap-6 p-6 bg-card rounded-xl border border-border">
-      <div className="flex-shrink-0">
-        <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
-          {number}
+    <div
+      className="flex flex-col sm:flex-row gap-6 p-6 bg-card border-thick border-foreground animate-slide-up opacity-0"
+      style={{
+        animationDelay: `${number * 100}ms`,
+        animationFillMode: "forwards",
+      }}
+    >
+      <div className="shrink-0 flex sm:flex-col items-center gap-4 sm:gap-2">
+        <div className="w-14 h-14 border-thick border-foreground bg-foreground text-background flex items-center justify-center">
+          <span className="text-mono text-xl font-bold">{number}</span>
         </div>
+        <div className="hidden sm:block w-[3px] flex-1 bg-border min-h-[40px]" />
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-3 mb-2">
-          <Icon className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold">{title}</h3>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 border-thick border-foreground bg-primary text-primary-foreground flex items-center justify-center">
+            <Icon className="w-5 h-5" strokeWidth={2.5} />
+          </div>
+          <h3 className="text-lg font-bold">{title}</h3>
         </div>
-        <p className="text-muted-foreground mb-3">{description}</p>
+        <p className="text-muted-foreground mb-4">{description}</p>
         {tip && (
-          <div className="flex items-start gap-2 text-sm bg-primary/5 text-primary p-3 rounded-lg">
-            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <div className="flex items-start gap-3 text-sm bg-foreground text-background p-4">
+            <AlertCircle
+              className="w-5 h-5 shrink-0 mt-0.5"
+              strokeWidth={2.5}
+            />
             <span>{tip}</span>
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function CheckItem({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-6 h-6 bg-primary text-primary-foreground flex items-center justify-center">
+        <Check className="w-4 h-4" strokeWidth={3} />
+      </div>
+      <span className="text-sm">{children}</span>
     </div>
   );
 }
@@ -64,7 +89,7 @@ export default function Install() {
       icon: FolderOpen,
       title: "Extract the ZIP File",
       description:
-        "Unzip the downloaded file to a location on your computer. Remember where you extract it - you'll need this folder in the next steps.",
+        "Unzip the downloaded file to a location on your computer. Remember where you extract it — you'll need this folder in the next steps.",
     },
     {
       number: 3,
@@ -101,105 +126,120 @@ export default function Install() {
     <div className="py-16 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-            Installation Guide
+        <div className="mb-12 animate-fade-in">
+          <span className="text-mono text-sm uppercase tracking-wide text-primary mb-4 block">
+            Guide
+          </span>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mb-4">
+            Installation
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Follow these simple steps to install Tweet Recall on your Chrome
-            browser. The process takes less than a minute.
+          <p className="text-muted-foreground text-lg max-w-xl">
+            Follow these steps to install Tweet Recall on Chrome. The process
+            takes less than a minute.
           </p>
         </div>
 
         {/* Download Button */}
-        <div className="mb-12 p-6 bg-primary/5 rounded-xl border border-primary/20 text-center">
-          <h2 className="font-semibold mb-3">Step 0: Get the Files</h2>
-          <a
-            href="https://github.com/sourav-bhar/tweet-recall/releases"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-          >
-            <Download className="w-5 h-5" />
-            Download from GitHub
-            <ExternalLink className="w-4 h-4" />
-          </a>
-          <p className="mt-3 text-sm text-muted-foreground">
+        <div className="mb-12 p-6 bg-foreground text-background border-thick border-foreground">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <span className="text-mono text-sm uppercase tracking-wide text-primary mb-1 block">
+                Step 0
+              </span>
+              <h2 className="font-bold text-xl">Get the Files</h2>
+            </div>
+            <a
+              href="https://github.com/sourav-bhar/tweet-recall/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-3 bg-primary text-primary-foreground px-6 py-4 font-bold uppercase tracking-wide border-thick border-background hover:bg-background hover:text-foreground transition-colors"
+            >
+              <Download className="w-5 h-5" strokeWidth={2.5} />
+              Download
+              <ExternalLink className="w-4 h-4" strokeWidth={2.5} />
+            </a>
+          </div>
+          <p className="mt-4 text-sm text-background/70">
             Or clone the repository and run{" "}
-            <code className="bg-secondary px-2 py-1 rounded">pnpm build</code>
+            <code className="bg-background/20 px-2 py-1 text-mono">
+              pnpm build
+            </code>
           </p>
         </div>
 
         {/* Installation Steps */}
-        <div className="space-y-4 mb-12">
+        <div className="space-y-0 mb-12">
           {steps.map((step) => (
             <InstallStep key={step.number} {...step} />
           ))}
         </div>
 
         {/* Success Section */}
-        <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl mb-12">
+        <div className="p-6 bg-primary text-primary-foreground border-thick border-foreground mb-12">
           <div className="flex items-start gap-4">
-            <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+            <div className="w-12 h-12 bg-background text-foreground flex items-center justify-center shrink-0">
+              <Check className="w-6 h-6" strokeWidth={3} />
+            </div>
             <div>
-              <h3 className="font-semibold text-lg mb-2">You're All Set!</h3>
-              <p className="text-muted-foreground mb-4">
+              <h3 className="font-bold text-xl mb-2">You're All Set!</h3>
+              <p className="mb-4 text-primary-foreground/80">
                 Tweet Recall is now installed and ready to use. Browse Twitter/X
                 normally and the extension will automatically capture tweets as
-                you scroll. Click the extension icon anytime to search through
-                your captured tweets.
+                you scroll.
               </p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  Auto-captures while browsing
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  Search with instant results
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  Export data anytime
-                </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <CheckItem>Auto-captures while browsing</CheckItem>
+                <CheckItem>Search with instant results</CheckItem>
+                <CheckItem>Export data anytime</CheckItem>
               </div>
             </div>
           </div>
         </div>
 
         {/* Troubleshooting */}
-        <div className="p-6 bg-card rounded-xl border border-border">
-          <h3 className="font-semibold text-lg mb-4">Troubleshooting</h3>
-          <div className="space-y-4 text-sm">
+        <div className="p-6 bg-card border-thick border-foreground">
+          <h3 className="font-bold text-xl mb-6">Troubleshooting</h3>
+          <div className="space-y-6">
             <div>
-              <h4 className="font-medium mb-1">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <span className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs text-mono">
+                  ?
+                </span>
                 Extension not capturing tweets?
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm pl-8">
                 Make sure you're on twitter.com or x.com. Try refreshing the
                 page after installation. Check Chrome DevTools console for any
                 errors.
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-1">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <span className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs text-mono">
+                  ?
+                </span>
                 Search not returning results?
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm pl-8">
                 Results only appear after you've browsed some tweets. The
-                extension captures tweets as you scroll - it doesn't import
+                extension captures tweets as you scroll — it doesn't import
                 historical data.
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-1">Need more help?</h4>
-              <p className="text-muted-foreground">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <span className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs text-mono">
+                  ?
+                </span>
+                Need more help?
+              </h4>
+              <p className="text-muted-foreground text-sm pl-8">
                 Check the{" "}
                 <a
                   href="https://github.com/sourav-bhar/tweet-recall/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary hover:underline"
+                  className="text-primary font-semibold border-b-2 border-primary hover:text-foreground hover:border-foreground transition-colors"
                 >
                   GitHub Issues
                 </a>{" "}
@@ -210,9 +250,13 @@ export default function Install() {
         </div>
 
         {/* Back to Home */}
-        <div className="mt-12 text-center">
-          <Link to="/" className="text-primary hover:underline font-medium">
-            ← Back to Home
+        <div className="mt-12">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 font-bold uppercase tracking-wide border-b-thick border-primary pb-1 hover:text-primary transition-colors"
+          >
+            <ArrowRight className="w-4 h-4 rotate-180" strokeWidth={3} />
+            Back to Home
           </Link>
         </div>
       </div>

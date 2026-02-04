@@ -1,32 +1,53 @@
 import { Link } from "react-router-dom";
-import { Bird, Github, Heart } from "lucide-react";
+import { Github, ArrowUpRight } from "lucide-react";
+
+function BrandMark() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative w-10 h-10 border-thick border-background flex items-center justify-center bg-primary">
+        <span className="text-primary-foreground font-bold text-lg tracking-tighter">
+          TR
+        </span>
+      </div>
+      <div className="flex flex-col">
+        <span className="text-lg font-bold tracking-tight leading-none">
+          Tweet
+        </span>
+        <span className="text-lg font-bold tracking-tight leading-none text-primary">
+          Recall
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <Bird className="w-6 h-6 text-primary" />
-              <span className="text-lg font-semibold">Tweet Recall</span>
-            </div>
-            <p className="text-muted-foreground text-sm max-w-sm">
+    <footer className="bg-foreground text-background">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <BrandMark />
+            <p className="text-background/60 text-sm mt-4 max-w-sm leading-relaxed">
               A privacy-first Chrome extension that captures tweets as you
               browse and lets you search them later. All data stays local in
               your browser.
             </p>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-4">Links</h3>
-            <ul className="space-y-2 text-sm">
+          {/* Links */}
+          <div className="md:col-span-3">
+            <h3 className="text-mono text-xs uppercase tracking-wide text-primary mb-4">
+              Navigation
+            </h3>
+            <ul className="space-y-3">
               <li>
                 <Link
                   to="/"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm text-background/70 hover:text-background transition-colors flex items-center gap-1"
                 >
                   Home
                 </Link>
@@ -34,7 +55,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/install"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm text-background/70 hover:text-background transition-colors flex items-center gap-1"
                 >
                   Install
                 </Link>
@@ -42,7 +63,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm text-background/70 hover:text-background transition-colors flex items-center gap-1"
                 >
                   Privacy Policy
                 </Link>
@@ -50,18 +71,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2 text-sm">
+          {/* Resources */}
+          <div className="md:col-span-4">
+            <h3 className="text-mono text-xs uppercase tracking-wide text-primary mb-4">
+              Resources
+            </h3>
+            <ul className="space-y-3">
               <li>
                 <a
                   href="https://github.com/sourav-bhar/tweet-recall"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                  className="text-sm text-background/70 hover:text-background transition-colors inline-flex items-center gap-2"
                 >
                   <Github className="w-4 h-4" />
-                  GitHub
+                  GitHub Repository
+                  <ArrowUpRight className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -69,9 +94,10 @@ export default function Footer() {
                   href="https://github.com/sourav-bhar/tweet-recall/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm text-background/70 hover:text-background transition-colors inline-flex items-center gap-2"
                 >
                   Report an Issue
+                  <ArrowUpRight className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -79,22 +105,23 @@ export default function Footer() {
                   href="https://github.com/sourav-bhar/tweet-recall/releases"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm text-background/70 hover:text-background transition-colors inline-flex items-center gap-2"
                 >
                   Releases
+                  <ArrowUpRight className="w-3 h-3" />
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
+        {/* Bottom */}
+        <div className="mt-16 pt-8 border-t border-background/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <p className="text-mono text-xs text-background/50">
             &copy; {currentYear} Sourav Bhar. MIT License.
           </p>
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-red-500" /> for privacy
-            enthusiasts
+          <p className="text-mono text-xs text-background/50">
+            Built for privacy enthusiasts
           </p>
         </div>
       </div>
