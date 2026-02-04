@@ -90,103 +90,63 @@ A privacy-first Chrome extension that captures tweets as you browse Twitter/X an
 
 ---
 
-## Installation (Step-by-Step for Beginners)
+## Installation
 
-This extension is not yet on the Chrome Web Store, so you'll need to install it manually. Don't worry - it's easy! Follow these steps:
+### Quick Install (Recommended)
 
-### Prerequisites
+1. **Download** the latest release from [GitHub Releases](https://github.com/sourav-bhar/tweet-recall/releases)
+2. **Unzip** the downloaded file
+3. **Open Chrome** and go to `chrome://extensions`
+4. **Enable Developer Mode** (toggle in top-right corner)
+5. **Click "Load unpacked"** and select the unzipped folder
+6. **Done!** You should see Tweet Recall in your extensions
 
-Before you begin, make sure you have:
+### Build from Source (For Developers)
 
-1. **Google Chrome** browser installed
-2. **Node.js** (version 18 or higher) - [Download here](https://nodejs.org/)
-3. **pnpm** package manager - Install by running this in your terminal:
-   ```bash
-   npm install -g pnpm
-   ```
+<details>
+<summary>Click to expand build instructions</summary>
 
-> **What's a terminal?**
-> - On **Mac**: Open the "Terminal" app (search for it in Spotlight with Cmd+Space)
-> - On **Windows**: Open "Command Prompt" or "PowerShell" (search in Start menu)
-> - On **Linux**: Open your terminal emulator
+#### Prerequisites
 
-### Step 1: Download the Code
+- [Node.js](https://nodejs.org/) (v18+)
+- pnpm: `npm install -g pnpm`
 
-You have two options:
+#### Steps
 
-**Option A: Download as ZIP (Easier)**
-1. Go to the GitHub repository page
-2. Click the green "Code" button
-3. Click "Download ZIP"
-4. Extract the ZIP file to a folder (e.g., `Documents/tweet-recall`)
-
-**Option B: Clone with Git**
 ```bash
+# Clone the repository
 git clone https://github.com/sourav-bhar/tweet-recall.git
 cd tweet-recall
-```
-
-### Step 2: Install Dependencies
-
-Open your terminal, navigate to the project folder, and run:
-
-```bash
-# Navigate to the folder (adjust path as needed)
-cd ~/Documents/tweet-recall
 
 # Install dependencies
 pnpm install
-```
 
-This will download all the required packages. It may take a minute.
-
-### Step 3: Build the Extension
-
-Still in your terminal, run:
-
-```bash
+# Build the extension
 pnpm build
 ```
 
 This creates a `dist` folder containing the built extension.
 
-### Step 4: Load the Extension in Chrome
+</details>
 
-1. **Open Chrome** and type `chrome://extensions` in the address bar, then press Enter
+### Pin the Extension (Recommended)
 
-2. **Enable Developer Mode**:
-   - Look for the "Developer mode" toggle in the **top-right corner**
-   - Click it to turn it ON (it should turn blue)
+1. Click the puzzle piece icon in Chrome's toolbar (top-right)
+2. Find "Tweet Recall" in the list
+3. Click the pin icon to keep it visible
 
-3. **Load the Extension**:
-   - Click the **"Load unpacked"** button that appears in the top-left
-   - Navigate to your project folder and select the `dist` folder
-   - Click "Select" or "Open"
-
-4. **Pin the Extension** (optional but recommended):
-   - Click the puzzle piece icon in Chrome's toolbar (top-right)
-   - Find "Tweet Recall" in the list
-   - Click the pin icon next to it
-
-### Step 5: Verify Installation
+### Verify It Works
 
 1. Go to [twitter.com](https://twitter.com) or [x.com](https://x.com)
 2. Scroll through some tweets
-3. Click the Tweet Recall extension icon in your toolbar
+3. Click the Tweet Recall extension icon
 4. You should see the tweets you just scrolled past!
 
-### Updating the Extension
+### Updating
 
-When there are updates:
+**From releases:** Download the new version, unzip, and click the refresh icon on `chrome://extensions`
 
-```bash
-cd ~/Documents/tweet-recall
-git pull                    # Get latest code (if using git)
-pnpm install               # Install any new dependencies
-pnpm build                 # Rebuild
-```
-
-Then go to `chrome://extensions` and click the **refresh icon** on the Tweet Recall card.
+**From source:** `git pull && pnpm install && pnpm build`, then refresh on `chrome://extensions`
 
 ---
 
@@ -330,17 +290,9 @@ This extension:
 ## Development
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Development with hot reload
-pnpm dev
-
-# Production build
-pnpm build
-
-# Type checking
-pnpm typecheck
+pnpm install    # Install dependencies
+pnpm dev        # Development with hot reload
+pnpm build      # Production build
 ```
 
 ---
