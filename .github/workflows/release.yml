@@ -1,0 +1,72 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build extension
+        run: pnpm build
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create zip
+        run: |
+          cd dist
+          zip -r ../tweet-recall-${{ steps.version.outputs.version }}.zip .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Tweet Recall v${{ steps.version.outputs.version }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
+          files: tweet-recall-${{ steps.version.outputs.version }}.zip
+          body: |
+            ## Installation
+
+            1. Download `tweet-recall-${{ steps.version.outputs.version }}.zip`
+            2. Unzip the file
+            3. Open Chrome → `chrome://extensions`
+            4. Enable **Developer mode** (top right)
+            5. Click **Load unpacked** → select the unzipped folder
+
+            ## What's New
+
+            See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+          generate_release_notes: true
