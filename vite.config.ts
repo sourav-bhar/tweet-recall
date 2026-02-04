@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       input: {
         popup: "src/popup/index.html",
+        fullpage: "src/fullpage/index.html",
       },
     },
   },

@@ -2,66 +2,191 @@
 
 **Remember every tweet you've seen. Search your Twitter browsing history.**
 
-A privacy-first Chrome extension that captures tweets as you browse Twitter/X and lets you search through them later. All data stays local in your browser.
+A privacy-first Chrome extension that captures tweets as you browse Twitter/X and lets you search, filter, organize, and revisit them later. All data stays local in your browser.
 
 ## Features
 
-- 🔍 **Instant Search**: Full-text search across all tweets you've seen with fuzzy matching
-- 🔒 **Privacy-First**: All data stored locally in IndexedDB - no servers, no accounts
-- ⚡ **Lightweight**: Passive capture with minimal CPU overhead via debounced processing
-- 📸 **Smart Capture**: Only captures tweets that enter your viewport (what you actually see)
-- 🔗 **Direct Links**: Click any result to open the original tweet
-- 📊 **Statistics**: See how many tweets you've captured and from how many authors
-- 💾 **Export**: Download your tweet history as JSON
-- 🎨 **Native UI**: Dark theme matching Twitter/X aesthetic
+### Core Functionality
+- **Automatic Capture**: Passively captures tweets as you scroll through Twitter/X
+- **Smart Viewport Detection**: Only captures tweets you actually see (not prefetched content)
+- **Privacy-First**: All data stored locally in IndexedDB - no servers, no accounts, no tracking
 
-## Installation
+### Search & Discovery
+- **Instant Full-Text Search**: Search across all tweets with fuzzy matching
+- **Advanced Search Operators**:
+  - `from:username` - Filter by author
+  - `has:media` - Tweets with images/video
+  - `is:retweet` - Retweets only
+  - `is:thread` - Thread tweets
+  - `has:quote` - Quote tweets
+  - `before:YYYY-MM-DD` - Tweets seen before a date
+  - `after:YYYY-MM-DD` - Tweets seen after a date
+- **Browse Mode**: View recent tweets without searching (reverse chronological)
 
-### Development
+### Organization
+- **Favorites**: Star tweets to save them for later
+- **Collections**: Create custom collections to organize tweets by topic
+- **Filter Chips**: Quick filters for media, retweets, threads, and quote tweets
+- **Time Filters**: Today, Last 7 Days, Last 30 Days, All Time
 
-1. **Clone and install dependencies:**
+### Views
+- **Popup View**: Quick access from the extension icon
+- **Fullpage View**: Advanced UI in a dedicated tab with:
+  - Sidebar with collections and filters
+  - Grid or list view toggle
+  - Sort options (Newest, Oldest, By Author)
+  - Detailed tweet cards with quoted tweet previews
+
+### Keyboard Navigation
+| Key           | Action                |
+| ------------- | --------------------- |
+| `j` / `↓`     | Select next tweet     |
+| `k` / `↑`     | Select previous tweet |
+| `Enter` / `o` | Open selected tweet   |
+| `s`           | Toggle favorite       |
+| `/`           | Focus search input    |
+| `Esc`         | Clear selection       |
+
+### Data Management
+- **Export**: Download your entire tweet history as JSON
+- **Statistics**: See total tweets captured and unique authors
+- **Clear Data**: Delete all captured data when needed
+
+---
+
+## Installation (Step-by-Step for Beginners)
+
+This extension is not yet on the Chrome Web Store, so you'll need to install it manually. Don't worry - it's easy! Follow these steps:
+
+### Prerequisites
+
+Before you begin, make sure you have:
+
+1. **Google Chrome** browser installed
+2. **Node.js** (version 18 or higher) - [Download here](https://nodejs.org/)
+3. **pnpm** package manager - Install by running this in your terminal:
    ```bash
-   git clone https://github.com/sourav-bhar/tweet-recall.git
-   cd tweet-recall
-   pnpm install
+   npm install -g pnpm
    ```
 
-2. **Build the extension:**
-   ```bash
-   pnpm build
-   ```
+> **What's a terminal?**
+> - On **Mac**: Open the "Terminal" app (search for it in Spotlight with Cmd+Space)
+> - On **Windows**: Open "Command Prompt" or "PowerShell" (search in Start menu)
+> - On **Linux**: Open your terminal emulator
 
-3. **Load in Chrome:**
-   - Open Chrome and go to `chrome://extensions`
-   - Enable "Developer mode" (toggle in top right)
-   - Click "Load unpacked"
-   - Select the `dist` folder from this project
+### Step 1: Download the Code
 
-4. **For development with hot reload:**
-   ```bash
-   pnpm dev
-   ```
-   Then load the `dist` folder as an unpacked extension.
+You have two options:
 
-### Production Build
+**Option A: Download as ZIP (Easier)**
+1. Go to the GitHub repository page
+2. Click the green "Code" button
+3. Click "Download ZIP"
+4. Extract the ZIP file to a folder (e.g., `Documents/tweet-recall`)
+
+**Option B: Clone with Git**
+```bash
+git clone https://github.com/sourav-bhar/tweet-recall.git
+cd tweet-recall
+```
+
+### Step 2: Install Dependencies
+
+Open your terminal, navigate to the project folder, and run:
+
+```bash
+# Navigate to the folder (adjust path as needed)
+cd ~/Documents/tweet-recall
+
+# Install dependencies
+pnpm install
+```
+
+This will download all the required packages. It may take a minute.
+
+### Step 3: Build the Extension
+
+Still in your terminal, run:
 
 ```bash
 pnpm build
 ```
 
-The built extension will be in the `dist` folder, ready to be packaged for the Chrome Web Store.
+This creates a `dist` folder containing the built extension.
 
-## Usage
+### Step 4: Load the Extension in Chrome
+
+1. **Open Chrome** and type `chrome://extensions` in the address bar, then press Enter
+
+2. **Enable Developer Mode**:
+   - Look for the "Developer mode" toggle in the **top-right corner**
+   - Click it to turn it ON (it should turn blue)
+
+3. **Load the Extension**:
+   - Click the **"Load unpacked"** button that appears in the top-left
+   - Navigate to your project folder and select the `dist` folder
+   - Click "Select" or "Open"
+
+4. **Pin the Extension** (optional but recommended):
+   - Click the puzzle piece icon in Chrome's toolbar (top-right)
+   - Find "Tweet Recall" in the list
+   - Click the pin icon next to it
+
+### Step 5: Verify Installation
+
+1. Go to [twitter.com](https://twitter.com) or [x.com](https://x.com)
+2. Scroll through some tweets
+3. Click the Tweet Recall extension icon in your toolbar
+4. You should see the tweets you just scrolled past!
+
+### Updating the Extension
+
+When there are updates:
+
+```bash
+cd ~/Documents/tweet-recall
+git pull                    # Get latest code (if using git)
+pnpm install               # Install any new dependencies
+pnpm build                 # Rebuild
+```
+
+Then go to `chrome://extensions` and click the **refresh icon** on the Tweet Recall card.
+
+---
+
+## Usage Guide
+
+### Basic Usage
 
 1. **Browse Twitter/X normally** - tweets are captured automatically as you scroll
-2. **Click the extension icon** to open the search popup
-3. **Type to search** - results appear instantly with fuzzy matching
-4. **Click a result** to open the original tweet
+2. **Click the extension icon** to open the popup
+3. **Search or browse** - see your recent tweets or search for specific ones
+4. **Click a tweet** to open it on Twitter/X
 
-### Keyboard Shortcuts
+### Using Advanced Search
 
-- `⌘K` / `Ctrl+K` - Focus search input
-- `Esc` - Clear search
+Combine text with operators for powerful searches:
+
+```
+from:elonmusk has:media         # Elon's tweets with images/video
+AI news after:2024-01-01        # AI tweets seen this year
+is:thread machine learning      # Threads about ML
+```
+
+### Using Collections
+
+1. **Open Fullpage View**: Click "Open Full View" in the popup or the fullpage icon
+2. **Create a Collection**: Click the + button next to "Collections" in the sidebar
+3. **Add Tweets**: Click the folder icon on any tweet, then select a collection
+4. **View a Collection**: Click on it in the sidebar to filter tweets
+5. **Delete a Collection**: Hover over it and click the trash icon
+
+### Using Favorites
+
+- Click the star icon on any tweet to add it to Favorites
+- View all favorites by clicking "Favorites" in the sidebar or popup tabs
+
+---
 
 ## How It Works
 
@@ -79,12 +204,20 @@ The built extension will be in the `dist` folder, ready to be packaged for the C
 │  Background Worker                                          │
 │  ├── IndexedDB → local storage (privacy-first)              │
 │  ├── MiniSearch → fast full-text search                     │
-│  └── Deduplication → tweet ID as primary key                │
+│  ├── Collections → organize tweets into groups              │
+│  └── Favorites → star important tweets                      │
 ├─────────────────────────────────────────────────────────────┤
 │  Popup UI                                                   │
-│  ├── Search bar with instant results                        │
-│  ├── Tweet previews with metadata                           │
-│  └── Settings (export, clear data)                          │
+│  ├── Browse mode (recent tweets)                            │
+│  ├── Search with operators                                  │
+│  ├── Favorites tab                                          │
+│  └── Filter chips                                           │
+├─────────────────────────────────────────────────────────────┤
+│  Fullpage UI                                                │
+│  ├── Sidebar with collections & filters                     │
+│  ├── Grid/list view toggle                                  │
+│  ├── Advanced sorting                                       │
+│  └── Collection management                                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -115,12 +248,19 @@ The built extension will be in the `dist` folder, ready to be packaged for the C
 
 You can store **years of tweet history** locally.
 
+---
+
 ## Tech Stack
 
-- **TypeScript** - Type-safe code
-- **Vite + CRXJS** - Fast builds with Chrome extension support
-- **MiniSearch** - Lightweight full-text search
-- **idb** - Promise-based IndexedDB wrapper
+| Component | Technology                    |
+| --------- | ----------------------------- |
+| Language  | TypeScript (strict mode)      |
+| Build     | Vite + @crxjs/vite-plugin     |
+| Storage   | IndexedDB via `idb` library   |
+| Search    | MiniSearch (full-text, fuzzy) |
+| UI        | Vanilla HTML/CSS/TypeScript   |
+
+---
 
 ## Privacy
 
@@ -129,6 +269,45 @@ This extension:
 - ✅ Never sends data to any server
 - ✅ Has no analytics or tracking
 - ✅ Requires only minimal permissions (activeTab, storage)
+- ✅ Open source - you can audit the code yourself
+
+---
+
+## Troubleshooting
+
+### Extension not capturing tweets
+- Make sure you're on twitter.com or x.com
+- Try refreshing the page after installing
+- Check the Chrome DevTools console for errors (F12 on the Twitter page)
+
+### Search not returning expected results
+- Tweets must be scrolled into view to be captured
+- Try different search terms or operators
+- Check if the tweet was captured by browsing recent tweets
+
+### Extension icon not visible
+- Click the puzzle piece icon in Chrome's toolbar
+- Pin Tweet Recall to make it always visible
+
+---
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Development with hot reload
+pnpm dev
+
+# Production build
+pnpm build
+
+# Type checking
+pnpm typecheck
+```
+
+---
 
 ## Contributing
 
@@ -139,6 +318,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+---
 
 ## License
 
