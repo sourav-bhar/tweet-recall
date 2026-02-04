@@ -1,5 +1,41 @@
 # Tweet Recall
 
+- [Tweet Recall](#tweet-recall)
+  - [Features](#features)
+    - [Core Functionality](#core-functionality)
+    - [Search \& Discovery](#search--discovery)
+    - [Organization](#organization)
+    - [Views](#views)
+    - [Keyboard Navigation](#keyboard-navigation)
+    - [Data Management](#data-management)
+  - [Installation (Step-by-Step for Beginners)](#installation-step-by-step-for-beginners)
+    - [Prerequisites](#prerequisites)
+    - [Step 1: Download the Code](#step-1-download-the-code)
+    - [Step 2: Install Dependencies](#step-2-install-dependencies)
+    - [Step 3: Build the Extension](#step-3-build-the-extension)
+    - [Step 4: Load the Extension in Chrome](#step-4-load-the-extension-in-chrome)
+    - [Step 5: Verify Installation](#step-5-verify-installation)
+    - [Updating the Extension](#updating-the-extension)
+  - [Usage Guide](#usage-guide)
+    - [Basic Usage](#basic-usage)
+    - [Using Advanced Search](#using-advanced-search)
+    - [Using Collections](#using-collections)
+    - [Using Favorites](#using-favorites)
+  - [How It Works](#how-it-works)
+    - [Architecture](#architecture)
+    - [Data Stored Per Tweet](#data-stored-per-tweet)
+    - [Storage Estimates](#storage-estimates)
+  - [Tech Stack](#tech-stack)
+  - [Privacy](#privacy)
+  - [Troubleshooting](#troubleshooting)
+    - [Extension not capturing tweets](#extension-not-capturing-tweets)
+    - [Search not returning expected results](#search-not-returning-expected-results)
+    - [Extension icon not visible](#extension-icon-not-visible)
+  - [Development](#development)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+
 **Remember every tweet you've seen. Search your Twitter browsing history.**
 
 A privacy-first Chrome extension that captures tweets as you browse Twitter/X and lets you search, filter, organize, and revisit them later. All data stays local in your browser.
