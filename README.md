@@ -1,6 +1,8 @@
 # Tweet Recall
 
-https://github.com/sourav-bhar/tweet-recall/raw/main/assets/demo-compressed.mp4
+
+https://github.com/user-attachments/assets/5b262cb3-fbcb-4c65-9e3b-2ce775ef61a1
+
 
 <p align="center">
   <a href="https://tweetrecall.xyz">Website</a> •
