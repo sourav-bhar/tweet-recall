@@ -21,7 +21,8 @@ A privacy-first Chrome extension that captures tweets as you browse Twitter/X an
 
 1. **Clone and install dependencies:**
    ```bash
-   cd /Users/souravbhar/Documents/code/tweet-recall
+   git clone https://github.com/sourav-bhar/tweet-recall.git
+   cd tweet-recall
    pnpm install
    ```
 
@@ -129,19 +130,16 @@ This extension:
 - ✅ Has no analytics or tracking
 - ✅ Requires only minimal permissions (activeTab, storage)
 
-## Converting Icons to PNG
+## Contributing
 
-The extension needs PNG icons. Convert the SVG files to PNG:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-```bash
-# Using ImageMagick
-convert public/icons/icon16.svg public/icons/icon16.png
-convert public/icons/icon48.svg public/icons/icon48.png
-convert public/icons/icon128.svg public/icons/icon128.png
-
-# Or use any SVG to PNG converter
-```
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+MIT - see [LICENSE](LICENSE) for details.
