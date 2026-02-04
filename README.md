@@ -69,22 +69,22 @@ The built extension will be in the `dist` folder, ready to be packaged for the C
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                   Tweet Recall Extension                     │
+│                   Tweet Recall Extension                    │
 ├─────────────────────────────────────────────────────────────┤
-│  Content Script (runs on x.com)                              │
-│  ├── IntersectionObserver → only captures viewed tweets      │
-│  ├── MutationObserver → detects new tweets in DOM            │
-│  └── Tweet Parser → extracts structured data                 │
+│  Content Script (runs on x.com)                             │
+│  ├── IntersectionObserver → only captures viewed tweets     │
+│  ├── MutationObserver → detects new tweets in DOM           │
+│  └── Tweet Parser → extracts structured data                │
 ├─────────────────────────────────────────────────────────────┤
-│  Background Worker                                           │
-│  ├── IndexedDB → local storage (privacy-first)               │
-│  ├── MiniSearch → fast full-text search                      │
-│  └── Deduplication → tweet ID as primary key                 │
+│  Background Worker                                          │
+│  ├── IndexedDB → local storage (privacy-first)              │
+│  ├── MiniSearch → fast full-text search                     │
+│  └── Deduplication → tweet ID as primary key                │
 ├─────────────────────────────────────────────────────────────┤
-│  Popup UI                                                    │
-│  ├── Search bar with instant results                         │
-│  ├── Tweet previews with metadata                            │
-│  └── Settings (export, clear data)                           │
+│  Popup UI                                                   │
+│  ├── Search bar with instant results                        │
+│  ├── Tweet previews with metadata                           │
+│  └── Settings (export, clear data)                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
