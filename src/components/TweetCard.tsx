@@ -69,7 +69,7 @@ export const TweetCard = memo(function TweetCard({
   return (
     <article
       className={cn(
-        "tweet-card relative flex gap-2.5 p-2.5 cursor-pointer transition-colors hover:bg-secondary/50",
+        "tweet-card relative flex gap-2.5 p-2.5 cursor-pointer transition-colors hover:bg-secondary/50 overflow-hidden",
         isSelected && "bg-secondary border-l-2 border-l-primary",
       )}
       onClick={onClick}
