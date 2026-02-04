@@ -381,6 +381,36 @@
   color: var(--accent);
 }
 
+/* Media Toggle Button */
+.toggle-media-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle-media-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.toggle-media-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.toggle-media-btn svg {
+  flex-shrink: 0;
+}
+
 /* Active Filters Bar */
 .active-filters {
   display: flex;

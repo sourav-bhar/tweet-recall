@@ -24,6 +24,8 @@ export interface TweetCardOptions {
   isTextExpanded?: boolean;
   /** Callback when expand button is clicked */
   onExpandClick?: (tweetId: string, event: Event) => void;
+  /** Whether to show media (images/videos) in expanded view */
+  showMedia?: boolean;
 }
 
 /**
@@ -43,6 +45,7 @@ export function renderTweetCard(
     isSelected = false,
     isTextExpanded = false,
     onExpandClick,
+    showMedia = false,
   } = options;
 
   const card = document.createElement("article");
@@ -102,7 +105,7 @@ export function renderTweetCard(
             ${isTextExpanded ? "Show less" : "Show more"}
           </button>
         ` : ""}
-        ${variant === "expanded" ? renderMediaGrid(tweet) : ""}
+        ${variant === "expanded" && showMedia ? renderMediaGrid(tweet) : ""}
         ${renderQuotedTweet(tweet)}
         <div class="tweet-card__meta">
           ${renderBadges(tweet)}

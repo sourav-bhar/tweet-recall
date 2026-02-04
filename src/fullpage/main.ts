@@ -46,6 +46,7 @@ interface AppState {
   selectedIndex: number;
   expandedIds: Set<string>;
   collections: Collection[];
+  showMedia: boolean;
 }
 
 // State
@@ -65,6 +66,7 @@ const state: AppState = {
   selectedIndex: -1,
   expandedIds: new Set(),
   collections: [],
+  showMedia: false,
 };
 
 // DOM Elements
@@ -90,6 +92,9 @@ const sortLabel = document.getElementById("sort-label") as HTMLSpanElement;
 // View toggle
 const viewListBtn = document.getElementById("view-list") as HTMLButtonElement;
 const viewGridBtn = document.getElementById("view-grid") as HTMLButtonElement;
+
+// Media toggle
+const toggleMediaBtn = document.getElementById("toggle-media") as HTMLButtonElement;
 
 // Collection modal
 const collectionModal = document.getElementById("collection-modal") as HTMLDivElement;
@@ -242,6 +247,7 @@ function handleExpandToggle(tweetId: string, _event: Event) {
         isSelected: state.selectedIndex === index,
         isTextExpanded: state.expandedIds.has(tweetId),
         onExpandClick: handleExpandToggle,
+        showMedia: state.showMedia,
       });
       oldCard.replaceWith(newCard);
     }
@@ -286,6 +292,7 @@ function renderResults(append = false) {
       isSelected: state.selectedIndex === actualIndex,
       isTextExpanded: state.expandedIds.has(tweet.id),
       onExpandClick: handleExpandToggle,
+      showMedia: state.showMedia,
     });
 
     card.addEventListener("click", (e) => {
@@ -996,6 +1003,14 @@ viewGridBtn.addEventListener("click", () => {
   state.viewMode = "grid";
   viewGridBtn.classList.add("active");
   viewListBtn.classList.remove("active");
+  renderResults(false);
+});
+
+// Media toggle
+toggleMediaBtn.addEventListener("click", () => {
+  state.showMedia = !state.showMedia;
+  toggleMediaBtn.classList.toggle("active", state.showMedia);
+  toggleMediaBtn.title = state.showMedia ? "Hide images" : "Show images";
   renderResults(false);
 });
 
