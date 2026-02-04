@@ -102,6 +102,7 @@ export function renderTweetCard(
             ${isTextExpanded ? "Show less" : "Show more"}
           </button>
         ` : ""}
+        ${variant === "expanded" ? renderMediaGrid(tweet) : ""}
         ${renderQuotedTweet(tweet)}
         <div class="tweet-card__meta">
           ${renderBadges(tweet)}
@@ -149,6 +150,35 @@ export function renderTweetCard(
   }
 
   return card;
+}
+
+/**
+ * Render media grid (images/video thumbnails) for expanded view
+ */
+function renderMediaGrid(tweet: CapturedTweet | SearchResult): string {
+  if (!tweet.mediaUrls || tweet.mediaUrls.length === 0) return "";
+
+  const mediaCount = tweet.mediaUrls.length;
+  const gridClass = mediaCount === 1 ? "single" : mediaCount === 2 ? "double" : "multi";
+
+  const mediaItems = tweet.mediaUrls.slice(0, 4).map((url, index) => {
+    // For the 4th image when there are more, show a "+N" overlay
+    const showOverlay = index === 3 && mediaCount > 4;
+    const overlayCount = mediaCount - 4;
+
+    return `
+      <div class="tweet-card__media-item">
+        <img src="${escapeHtml(url)}" alt="Tweet media ${index + 1}" loading="lazy" />
+        ${showOverlay ? `<div class="tweet-card__media-overlay">+${overlayCount}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="tweet-card__media tweet-card__media--${gridClass}">
+      ${mediaItems}
+    </div>
+  `;
 }
 
 /**

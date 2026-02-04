@@ -27,6 +27,7 @@ function createIndex(): MiniSearch<CapturedTweet> {
       "seenAt",
       "url",
       "hasMedia",
+      "mediaUrls",
       "isRetweet",
       "isThread",
       "quotedText",

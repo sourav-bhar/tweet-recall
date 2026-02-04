@@ -18,6 +18,8 @@ export interface CapturedTweet {
   url: string;
   /** Whether the tweet contains media (images/video) */
   hasMedia: boolean;
+  /** URLs of media (images/video thumbnails) */
+  mediaUrls?: string[];
   /** Whether this is a retweet */
   isRetweet: boolean;
   /** Whether this is part of a thread */

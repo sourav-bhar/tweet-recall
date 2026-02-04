@@ -41,10 +41,66 @@ export function parseTweetElement(article: Element): CapturedTweet | null {
       ? new Date(timeElement.dateTime).getTime()
       : Date.now();
 
-    // Check for media
-    const hasMedia = !!(
+    // Check for media and extract URLs
+    const mediaUrls: string[] = [];
+
+    // Extract image URLs - Twitter images have alt="Image"
+    const imageElements = article.querySelectorAll('img[alt="Image"]');
+    imageElements.forEach((img) => {
+      const src = img.getAttribute("src");
+      if (src && src.includes("pbs.twimg.com/media")) {
+        // Try to get higher quality version by modifying URL params
+        // Twitter image URLs often have ?format=jpg&name=small - we can request medium or large
+        let cleanUrl = src;
+        if (src.includes("name=")) {
+          // Replace size parameter for better quality
+          cleanUrl = src.replace(/name=\w+/, "name=medium");
+        }
+        if (!mediaUrls.includes(cleanUrl)) {
+          mediaUrls.push(cleanUrl);
+        }
+      }
+    });
+
+    // Fallback: also check inside tweetPhoto containers
+    if (mediaUrls.length === 0) {
+      const photoElements = article.querySelectorAll('[data-testid="tweetPhoto"] img');
+      photoElements.forEach((img) => {
+        const src = img.getAttribute("src");
+        if (src && !src.includes("profile_images") && !src.includes("emoji")) {
+          let cleanUrl = src;
+          if (src.includes("name=")) {
+            cleanUrl = src.replace(/name=\w+/, "name=medium");
+          }
+          if (!mediaUrls.includes(cleanUrl)) {
+            mediaUrls.push(cleanUrl);
+          }
+        }
+      });
+    }
+
+    // Extract video poster/thumbnail
+    const videoElements = article.querySelectorAll('video');
+    videoElements.forEach((video) => {
+      const poster = video.getAttribute("poster");
+      if (poster && !mediaUrls.includes(poster)) {
+        mediaUrls.push(poster);
+      }
+    });
+
+    // Also check for video thumbnails with specific alt text or in video player containers
+    const videoThumbnails = article.querySelectorAll('[data-testid="videoPlayer"] img, [data-testid="previewInterstitial"] img, img[alt="Embedded video"]');
+    videoThumbnails.forEach((img) => {
+      const src = img.getAttribute("src");
+      if (src && !src.includes("profile_images") && !src.includes("emoji") && !mediaUrls.includes(src)) {
+        mediaUrls.push(src);
+      }
+    });
+
+    const hasMedia = mediaUrls.length > 0 || !!(
       article.querySelector('[data-testid="tweetPhoto"]') ||
       article.querySelector('[data-testid="videoPlayer"]') ||
+      article.querySelector('img[alt="Image"]') ||
       article.querySelector('[data-testid="card.wrapper"]')
     );
 
@@ -174,6 +230,7 @@ export function parseTweetElement(article: Element): CapturedTweet | null {
       seenAt: Date.now(),
       url: `https://x.com/${author}/status/${id}`,
       hasMedia,
+      mediaUrls: mediaUrls.length > 0 ? mediaUrls : undefined,
       isRetweet,
       isThread,
       quotedText,
