@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tweet Recall",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Remember every tweet you've seen. Search your Twitter browsing history.",
   "permissions": ["storage", "activeTab"],
   "host_permissions": ["https://x.com/*", "https://twitter.com/*"],
